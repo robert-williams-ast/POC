@@ -7,6 +7,9 @@ on:
   - push
   - workflow_dispatch
 
+permissions:
+  contents: write
+  
 jobs:
   build:
       name: Build and Test
@@ -41,3 +44,8 @@ jobs:
  
         #- name: Test
         #  run: pnpm test
+
+        - name: Deploy to Pages
+          uses: JamesIves/github-pages-deploy-action@v4
+          with:
+            folder: apps/demo/build      
