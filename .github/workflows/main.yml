@@ -44,13 +44,12 @@ jobs:
  
         #- name: Test
         #  run: pnpm test
-
-        - name: compress archive
-          run: tar -zcvf github-pages apps/demo/build
             
         - name: Push archive to GitHub Pages
           id: archive
           uses: actions/upload-pages-artifact@v1
+          with: 
+            path: apps/demo/build
 
   deploy:
     needs: build
