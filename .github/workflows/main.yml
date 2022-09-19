@@ -44,7 +44,11 @@ jobs:
  
         #- name: Test
         #  run: pnpm test
-            
+        - name: Move to SHA and Git branch
+          run: |
+            printenv 
+            echo $GITHUB_REF | sed -E 's/(refs\/heads\/)(.*)/\2/'
+
         - name: Push archive to GitHub Pages
           id: archive
           uses: actions/upload-pages-artifact@v1
