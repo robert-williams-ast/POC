@@ -12,7 +12,7 @@ permissions:
   
 jobs:
   build:
-      name: Build and Test
+      name: Build and Archive
       timeout-minutes: 15
       runs-on: ubuntu-latest
       # To use Remote Caching, uncomment the next lines and follow the steps below.
@@ -45,7 +45,24 @@ jobs:
         #- name: Test
         #  run: pnpm test
 
-        - name: Deploy to Pages
-          uses: JamesIves/github-pages-deploy-action@v4
-          with:
-            folder: apps/demo/build      
+        - name: compress archive
+          run: tar -zcvf github-pages apps/demo/build
+            
+        - name: Push archive to GitHub Pages
+          id: archive
+          uses: actions/upload-pages-artifact@v1
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+
