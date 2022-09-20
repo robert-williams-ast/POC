@@ -1,0 +1,35 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy
+
+# Controls when the workflow will run
+on:
+  - workflow_dispatch
+
+permissions:
+  contents: write
+  
+jobs:
+  deploy:
+    name: deploy
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Find Artifact
+        run: |
+          node .github/workflows/findArtifact | read url 
+          export url
+        uses: actions/setup-node
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+
