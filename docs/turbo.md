@@ -1,10 +1,4 @@
-# Turborepo starter
-
-This is a pnpm starter turborepo with github actions for CD with GitHub Pages.
-
-
-
--- The rest of this is the default turborepo docs. 
+The default turborepo docs.
 
 ## What's inside?
 
