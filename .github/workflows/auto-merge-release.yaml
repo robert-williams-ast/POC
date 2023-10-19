@@ -17,14 +17,14 @@ jobs:
 
       - name: Generate unique branch name
         id: generate-branch-name
-        run: echo "::release-in-develop-$(date +%s)"
+        run: echo "branchName=release-in-develop-$(date +%s)" >> "$GITHUB_OUTPUT"
 
       - name: Create new release-in-develop branch from release
         uses: peterjgrainger/action-create-branch@v2.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.AIRSTRIPTECH_BOT_PAT }}
         with:
-          branch: ${{ steps.generate-branch-name.outputs.stdout }}
+          branch: ${{ steps.generate-branch-name.outputs.branchName }}
           sha: ${{ github.sha }}
 
       - name: Opening pull request to merge release-in-develop into develop
