@@ -17,7 +17,7 @@ jobs:
 
       - name: Generate unique branch name
         id: generate-branch-name
-        run: echo "release-in-develop-$(date +%s)"
+        run: echo "::release-in-develop-$(date +%s)"
 
       - name: Create new release-in-develop branch from release
         uses: peterjgrainger/action-create-branch@v2.2.0
