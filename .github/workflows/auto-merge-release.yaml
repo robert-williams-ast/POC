@@ -1,0 +1,35 @@
+name: Auto Merge Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release/*
+
+jobs:
+  auto-merge:
+    name: Auto-merge ${{ github.ref_name }} into [develop]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v3
+
+      - name: Generate unique branch name
+        id: generate-branch-name
+        run: echo "release-in-develop-$(date +%s)"
+
+      - name: Create new release-in-develop branch from release
+        uses: peterjgrainger/action-create-branch@v2.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.AIRSTRIPTECH_BOT_PAT }}
+        with:
+          branch: ${{ steps.generate-branch-name.outputs.stdout }}
+          sha: ${{ github.sha }}
+
+      - name: Opening pull request to merge release-in-develop into develop
+        uses: tretuna/sync-branches@1.4.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.AIRSTRIPTECH_BOT_PAT }}
+          FROM_BRANCH: ${{ steps.generate-branch-name.outputs.stdout }}
+          TO_BRANCH: '${{ github.event.repository.default_branch }}'
